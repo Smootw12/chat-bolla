@@ -17,11 +17,10 @@ const OtherMessage: React.FC<UserMessageProps> = ({
   return (
     <div className="flex w-full mt-2 space-x-3 max-w-xs">
       {imageUrl ? (
-        <Image
+        <img
           className="flex-shrink-0 h-10 w-10 rounded-full"
           src={imageUrl}
-          alt="Author pp"
-        />
+        ></img>
       ) : (
         <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
       )}

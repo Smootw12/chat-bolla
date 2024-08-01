@@ -25,11 +25,11 @@ const UserMessage: React.FC<UserMessageProps> = ({
         </span>
       </div>
       {imageUrl ? (
-        <Image
+        <img
           className="flex-shrink-0 h-10 w-10 rounded-full"
           src={imageUrl}
           alt="Author pp"
-        />
+        ></img>
       ) : (
         <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
       )}
