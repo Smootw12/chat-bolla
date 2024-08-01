@@ -1,6 +1,7 @@
 "use client";
 
 import { formatTimeToNow } from "@/lib/utils";
+import Image from "next/image";
 
 type UserMessageProps = {
   text: string;
@@ -24,10 +25,11 @@ const UserMessage: React.FC<UserMessageProps> = ({
         </span>
       </div>
       {imageUrl ? (
-        <img
+        <Image
           className="flex-shrink-0 h-10 w-10 rounded-full"
           src={imageUrl}
-        ></img>
+          alt="Author pp"
+        />
       ) : (
         <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
       )}
