@@ -22,6 +22,7 @@ export default function Home() {
           if (message.imageUrl === user?.imageUrl) {
             return (
               <UserMessage
+                key={message._creationTime}
                 text={message.text}
                 createdAt={message._creationTime}
                 imageUrl={message.imageUrl}
@@ -30,6 +31,7 @@ export default function Home() {
           }
           return (
             <OtherMessage
+              key={message._creationTime}
               createdAt={message._creationTime}
               imageUrl={message.imageUrl}
               text={message.text}
