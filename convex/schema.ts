@@ -6,4 +6,9 @@ export default defineSchema({
     imageUrl: v.string(),
     text: v.string(),
   }),
+  subscriptions: defineTable({
+    subscription: v.string(),
+    accountId: v.string(),
+    browserId: v.string(),
+  }).index("by_image_url", ["accountId"]),
 });

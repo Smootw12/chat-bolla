@@ -5,15 +5,36 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import UserMessage from "./_components/UserMessage";
 import OtherMessage from "./_components/OtherMessage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { user } = useUser();
 
   const [input, setInput] = useState("");
 
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      const handleServiceWorker = async () => {
+        const register = await navigator.serviceWorker.register("/sw.js");
+
+        const subscription = await register.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: process.env.VAPID_PUBLIC,
+        });
+
+        subscribe({
+          subscription: JSON.stringify(subscription),
+          accountId: user!.imageUrl,
+          browserId: navigator.userAgent,
+        });
+      };
+      handleServiceWorker();
+    }
+  }, []);
+
   const messages = useQuery(api.message.get);
   const postMessage = useMutation(api.message.post);
+  const subscribe = useMutation(api.subscriptions.subscribe);
 
   return (
     <div className="flex flex-col flex-grow w-full max-w-xl bg-white shadow-xl rounded-lg overflow-hidden">
@@ -71,9 +92,9 @@ export default function Home() {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="lucide lucide-send text-white"
             >
               <path d="m22 2-7 20-4-9-9-4Z" />

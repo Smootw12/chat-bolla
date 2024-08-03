@@ -14,8 +14,33 @@ export const post = mutation({
     text: v.string(),
   },
   handler: async function (ctx, args) {
-    return await ctx.db.insert("messages", {
+    await ctx.db.insert("messages", {
       ...args,
     });
+
+    const subscriptions = await ctx.db.query("subscriptions").collect();
+
+    const notificationPayload = {
+      title: "CHAT BOLLA",
+      body: args.text,
+      icon: args.imageUrl,
+      data: {
+        url: "https://chat-bolla.vercel.app",
+      },
+    };
+
+    for (let subscription of subscriptions) {
+      if (subscription.accountId !== args.imageUrl) {
+        let payload = {
+          subscription: subscription.subscription,
+          notificationPayload,
+        };
+
+        await fetch("https://chat-bolla.vercel.app/api/sendNotification", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+      }
+    }
   },
 });
