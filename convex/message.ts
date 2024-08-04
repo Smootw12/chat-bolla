@@ -33,7 +33,7 @@ export const sendNotifications = internalAction({
       // webhook, and display it as a message in your
       // discord channel
       await fetch(
-        process.env.DISCORD_WEBHOOK,
+        process.env.DISCORD_WEBHOOK!,
         {
           method: "POST",
           headers: {
