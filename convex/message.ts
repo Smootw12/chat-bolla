@@ -64,7 +64,7 @@ export const sendNotifications = internalAction({
       // webhook, and display it as a message in your
       // discord channel
       await fetch(
-        "https://discord.com/api/webhooks/1269627007247847485/TDgJ8JEFzLGGfKGpebVNr-FkaJ70Af_27pTaEJRQOGu4_iQbp_ox-5ljWU3DjvMLkfEU",
+        process.env.DISCORD_WEBHOOK!,
         {
           method: "POST",
           headers: {
