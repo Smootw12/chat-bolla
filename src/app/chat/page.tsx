@@ -5,58 +5,58 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import UserMessage from "./_components/UserMessage";
 import OtherMessage from "./_components/OtherMessage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const { user } = useUser();
 
   const [input, setInput] = useState("");
 
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      const handleServiceWorker = async () => {
-        const register = await navigator.serviceWorker.register("/sw.js");
-
-        const subscription = await register.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: process.env.VAPID_PUBLIC,
-        });
-
-        subscribe({
-          subscription: JSON.stringify(subscription),
-          accountId: user!.imageUrl,
-          browserId: navigator.userAgent,
-        });
-      };
-      handleServiceWorker();
-    }
-  }, []);
-
   const messages = useQuery(api.message.get);
+
   const postMessage = useMutation(api.message.post);
-  const subscribe = useMutation(api.subscriptions.subscribe);
+
+  function handleSubmit() {
+    if (input !== "") {
+      postMessage({ imageUrl: user?.imageUrl || "", text: input });
+    }
+
+    setInput("");
+  }
 
   return (
     <div className="flex flex-col flex-grow w-full max-w-xl bg-white shadow-xl rounded-lg overflow-hidden">
-      <div className="flex flex-col flex-grow h-0 p-4 overflow-auto">
-        {messages?.map((message) => {
+      <div className="flex flex-col justify-end flex-grow h-0 p-4 overflow-auto">
+        {messages?.map((message, idx) => {
           if (message.imageUrl === user?.imageUrl) {
             return (
-              <UserMessage
+              <div
+                className="flex flex-col items-end"
                 key={message._creationTime}
-                text={message.text}
-                createdAt={message._creationTime}
-                imageUrl={message.imageUrl}
-              />
+              >
+                {message.authorName !==
+                  messages[idx - 1 >= 0 ? idx - 1 : 0].authorName ||
+                  (idx === 0 && <h1>{message.authorName}</h1>)}
+                <UserMessage
+                  text={message.text}
+                  createdAt={message._creationTime}
+                  imageUrl={message.imageUrl}
+                />
+              </div>
             );
           }
+
           return (
-            <OtherMessage
-              key={message._creationTime}
-              createdAt={message._creationTime}
-              imageUrl={message.imageUrl}
-              text={message.text}
-            />
+            <div className="flex flex-col" key={message._creationTime}>
+              {message.authorName !==
+                messages[idx - 1 >= 0 ? idx - 1 : 0].authorName ||
+                (idx === 0 && <h1>{message.authorName}</h1>)}
+              <OtherMessage
+                createdAt={message._creationTime}
+                imageUrl={message.imageUrl}
+                text={message.text}
+              />
+            </div>
           );
         })}
       </div>
@@ -70,19 +70,18 @@ export default function Home() {
             className="flex items-center h-10 w-full rounded px-3 text-sm"
             type="text"
             value={input}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSubmit();
+              }
+            }}
             onChange={(e) => {
               setInput(e.target.value);
             }}
             placeholder="Type your message…"
           />
           <button
-            onClick={() => {
-              if (input !== "") {
-                postMessage({ imageUrl: user?.imageUrl || "", text: input });
-              }
-
-              setInput("");
-            }}
+            onClick={() => handleSubmit()}
             className="flex-shrink-0 flex items-center justify-center w-10 h-10 bg-blue-700 rounded"
           >
             <svg

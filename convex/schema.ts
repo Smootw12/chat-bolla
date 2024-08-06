@@ -5,10 +5,11 @@ export default defineSchema({
   messages: defineTable({
     imageUrl: v.string(),
     text: v.string(),
+    authorName: v.optional(v.string()),
   }),
-  subscriptions: defineTable({
-    subscription: v.string(),
-    accountId: v.string(),
-    browserId: v.string(),
-  }).index("by_image_url", ["accountId"]),
+  users: defineTable({
+    imageUrl: v.string(),
+    discordId: v.string(),
+    name: v.string(),
+  }),
 });
