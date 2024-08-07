@@ -5,7 +5,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import UserMessage from "./_components/UserMessage";
 import OtherMessage from "./_components/OtherMessage";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const { user } = useUser();
@@ -15,6 +15,15 @@ export default function Home() {
   const messages = useQuery(api.message.get);
 
   const postMessage = useMutation(api.message.post);
+
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    if (bottomRef.current) {
+      // @ts-expect-error
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   function handleSubmit() {
     if (input !== "") {
@@ -28,11 +37,13 @@ export default function Home() {
     <div className="flex flex-col flex-grow w-full max-w-xl bg-white shadow-xl rounded-lg overflow-hidden">
       <div className="flex flex-col flex-grow h-0 p-4 overflow-auto">
         {messages?.map((message, idx) => {
+          const isLastMessage = idx === messages.length - 1;
           if (message.imageUrl === user?.imageUrl) {
             return (
               <div
                 className="flex flex-col items-end"
                 key={message._creationTime}
+                ref={isLastMessage ? bottomRef : null}
               >
                 {(message.authorName !==
                   messages[idx - 1 >= 0 ? idx - 1 : 0].authorName ||
@@ -47,7 +58,11 @@ export default function Home() {
           }
 
           return (
-            <div className="flex flex-col" key={message._creationTime}>
+            <div
+              className="flex flex-col"
+              key={message._creationTime}
+              ref={isLastMessage ? bottomRef : null}
+            >
               {(message.authorName !==
                 messages[idx - 1 >= 0 ? idx - 1 : 0].authorName ||
                 idx === 0) && <h1>{message.authorName}</h1>}
