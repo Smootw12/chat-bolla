@@ -14,6 +14,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as globals from "../globals.js";
 import type * as message from "../message.js";
 
 /**
@@ -25,6 +26,7 @@ import type * as message from "../message.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  globals: typeof globals;
   message: typeof message;
 }>;
 export declare const api: FilterApi<

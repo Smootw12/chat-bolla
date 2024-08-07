@@ -7,6 +7,7 @@ import {
 } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { Doc, Id } from "./_generated/dataModel";
+import { discordWebhook } from "./globals";
 
 export const get = query({
   args: {},
@@ -57,24 +58,21 @@ export const sendNotifications = internalAction({
 
     usersToNotify.map((user) => (message += user.discordId + " "));
 
-    message += "[**NOVITA NELLA CHAT**!](https://chat-bolla.vercel.app/chat)";
+    message += "[**NOVITA NELLA CHAT!**](https://chat-bolla.vercel.app/chat)";
 
     try {
       // A fetch request to send data through the discord
       // webhook, and display it as a message in your
       // discord channel
-      await fetch(
-        process.env.DISCORD_WEBHOOK!,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            content: message,
-          }),
-        }
-      );
+      await fetch(discordWebhook, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: message,
+        }),
+      });
     } catch (err: any) {
       // Just in case :)
       console.log(err.message);

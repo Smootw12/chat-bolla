@@ -26,7 +26,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col flex-grow w-full max-w-xl bg-white shadow-xl rounded-lg overflow-hidden">
-      <div className="flex flex-col justify-end flex-grow h-0 p-4 overflow-auto">
+      <div className="flex flex-col flex-grow h-0 p-4 overflow-auto">
         {messages?.map((message, idx) => {
           if (message.imageUrl === user?.imageUrl) {
             return (
@@ -34,9 +34,9 @@ export default function Home() {
                 className="flex flex-col items-end"
                 key={message._creationTime}
               >
-                {message.authorName !==
+                {(message.authorName !==
                   messages[idx - 1 >= 0 ? idx - 1 : 0].authorName ||
-                  (idx === 0 && <h1>{message.authorName}</h1>)}
+                  idx === 0) && <h1>{message.authorName}</h1>}
                 <UserMessage
                   text={message.text}
                   createdAt={message._creationTime}
@@ -48,9 +48,9 @@ export default function Home() {
 
           return (
             <div className="flex flex-col" key={message._creationTime}>
-              {message.authorName !==
+              {(message.authorName !==
                 messages[idx - 1 >= 0 ? idx - 1 : 0].authorName ||
-                (idx === 0 && <h1>{message.authorName}</h1>)}
+                idx === 0) && <h1>{message.authorName}</h1>}
               <OtherMessage
                 createdAt={message._creationTime}
                 imageUrl={message.imageUrl}
