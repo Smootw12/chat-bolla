@@ -82,7 +82,7 @@ export default function Home() {
             <UserButton></UserButton>
           </div>
           <input
-            className="flex items-center h-10 w-full rounded px-3 text-sm"
+            className="flex items-center h-10 w-full rounded px-3 text-base"
             type="text"
             value={input}
             onKeyDown={(e) => {
