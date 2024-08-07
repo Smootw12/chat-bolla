@@ -21,7 +21,7 @@ export default function RootLayout({
       <body
         className={cn(
           inter.className,
-          "flex flex-col items-center justify-center w-screen min-h-screen bg-gray-100 text-gray-800 pb-[80px] md:py-10"
+          "flex flex-col items-center justify-center w-screen min-h-screen bg-gray-100 text-gray-800 pb-12 md:py-10"
         )}
       >
         <ClientProviders>{children}</ClientProviders>
