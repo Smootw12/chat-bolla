@@ -1,1 +1,1 @@
-export const export const discordWebhook = "channel's webhook";
+export const discordWebhook = "channel's webhook";
